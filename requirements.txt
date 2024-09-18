@@ -1,7 +1,4 @@
 google-generativeai
 flask
 PyPDF2
-dotenv
-os
-Flask
-setuptools
+python-dotenv
