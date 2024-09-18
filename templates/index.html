@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Uploader</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        color: #fff;
+        padding: 1.5em 0;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 30px 30px;
+    }
+
+    h1 {
+        font-size: 2.2em;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 4em auto;
+        padding: 3em;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .container:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+        font-size: 1.8em;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 1.5em;
+        border-bottom: 3px solid #88d3ce;
+        padding-bottom: 0.5em;
+    }
+
+    form {
+        margin-bottom: 2.5em;
+    }
+
+    label {
+        font-weight: 500;
+        margin-bottom: 0.7em;
+        display: block;
+        color: #555;
+        font-size: 1.1em;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+        width: 100%;
+        padding: 0.9em;
+        margin-bottom: 1.5em;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 1.05em;
+        color: #333;
+        background-color: #f9f9fc;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+        border-color: #6e45e2;
+        outline: none;
+        box-shadow: 0 0 10px rgba(110, 69, 226, 0.2);
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    button {
+        background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        color: #fff;
+        border: none;
+        padding: 0.9em 2.5em;
+        font-size: 1.1em;
+        font-weight: 500;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 8px 15px rgba(110, 69, 226, 0.3);
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #88d3ce, #6e45e2);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 20px rgba(110, 69, 226, 0.3);
+    }
+
+    button:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 15px rgba(110, 69, 226, 0.3);
+    }
+
+    .section-header {
+        background-color: #f9f9fc;
+        padding: 1em;
+        border-radius: 12px;
+        margin-bottom: 1.5em;
+        font-size: 1.4em;
+        font-weight: 600;
+        color: #444;
+        border-left: 5px solid #6e45e2;
+    }
+
+    input[readonly],
+    textarea[readonly] {
+        background-color: #f1f4f8;
+        color: #555;
+        border-color: #ddd;
+    }
+
+    input[type="file"] {
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    input[type="file"]::file-selector-button {
+        background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        color: #fff;
+        padding: 0.6em 1.2em;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+        background: linear-gradient(135deg, #88d3ce, #6e45e2);
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            width: 90%;
+            padding: 2em;
+        }
+
+        h1 {
+            font-size: 1.7em;
+        }
+
+        h2 {
+            font-size: 1.4em;
+        }
+
+        button {
+            padding: 0.7em 2em;
+            font-size: 1em;
+        }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Auto Resume Parsing & Auto Form Filling LLM Application</h1>
+    </header>
+    <div class="container">
+        <h2>Upload Resume</h2>
+        <form id="resumeForm" action="/upload_resume" method="post" enctype="multipart/form-data">
+            <label for="resume">Resume (PDF only):</label>
+            <input type="file" id="resume" name="resume" accept=".pdf" required>
+            <button type="submit">Upload</button>
+        </form>
+
+        {% if full_name %}
+        <h2 class="section-header">Extracted Resume Details</h2>
+        <form id="resumeDetailsForm">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" value="{{ full_name }}" readonly><br>
+
+            <label for="contactNumber">Contact Number:</label>
+            <input type="text" id="contactNumber" name="contactNumber" value="{{ contact_number }}" readonly><br>
+
+            <label for="emailAddress">Email Address:</label>
+            <input type="text" id="emailAddress" name="emailAddress" value="{{ email_address }}" readonly><br>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ location }}" readonly><br>
+
+            <label for="technicalSkills">Technical Skills:</label>
+            <textarea id="technicalSkills" name="technicalSkills" rows="4" readonly>{{ technical_skills }}</textarea><br>
+
+            <label for="nonTechnicalSkills">Non-Technical Skills:</label>
+            <textarea id="nonTechnicalSkills" name="nonTechnicalSkills" rows="4" readonly>{{ non_technical_skills }}</textarea><br>
+
+            <label for="education">Education:</label>
+            <textarea id="education" name="education" rows="4" readonly>{{ education }}</textarea><br>
+
+            <label for="workExperience">Work Experience:</label>
+            <textarea id="workExperience" name="workExperience" rows="4" readonly>{{ work_experience }}</textarea><br>
+
+            <label for="certifications">Certifications:</label>
+            <textarea id="certifications" name="certifications" rows="4" readonly>{{ certifications }}</textarea><br>
+
+            <label for="languages">Languages:</label>
+            <textarea id="languages" name="languages" rows="2" readonly>{{ languages }}</textarea><br>
+
+            <label for="suggestedCategory">Suggested Resume Category:</label>
+            <input type="text" id="suggestedCategory" name="suggestedCategory" value="{{ suggested_resume_category }}" readonly><br>
+
+            <label for="recommendedRoles">Recommended Job Roles:</label>
+            <textarea id="recommendedRoles" name="recommendedRoles" rows="2" readonly>{{ recommended_job_roles }}</textarea><br>
+        </form>
+        {% endif %}
+    </div>
+</body>
+</html>
